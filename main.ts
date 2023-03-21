@@ -3,23 +3,30 @@
 import {$} from 'https://deno.land/x/zx_deno/mod.mjs'
 await $`date`
 
+let current_branch = await $`git branch --show-current`
+console.log(current_branch)
+let branch = await $`git branch --all --format='%(refname:short)'`
+console.log(branch)
+
+
+
 if (import.meta.main) {
-  const git_log = Deno.run({
-    cmd: ["git", "branch", "--all", "--format='%(refname:short)'"],
-    stdin: "piped",
-    stdout: "piped",
-  })
+  // const git_log = Deno.run({
+  //   cmd: ["git", "branch", "--all", "--format='%(refname:short)'"],
+  //   stdin: "piped",
+  //   stdout: "piped",
+  // })
 
-  let branch_word: string | null = window.prompt("ブランチを入力してください。");
+  // let branch_word: string | null = window.prompt("ブランチを入力してください。");
 
-  if (!branch_word) branch_word = ""
-  const input = new TextEncoder().encode(branch_word)
+  // if (!branch_word) branch_word = ""
+  // const input = new TextEncoder().encode(branch_word)
 
-  await git_log.stdin().write(input);
+  // await git_log.stdin().write(input);
 
-  const result = await git_log.output();
-  const text = new TextDecoder().decode(result);
-  console.log(text)
+  // const result = await git_log.output();
+  // const text = new TextDecoder().decode(result);
+  // console.log(text)
   // let response = await exec(`zsh -c "fzf | xargs git checkout"`);
 
 }
