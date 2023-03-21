@@ -3,11 +3,28 @@
 import {$} from 'https://deno.land/x/zx_deno/mod.mjs'
 await $`date`
 
+const command_args: string[] = Deno.args
+console.log(command_args)
+/** argsで引数を取得するモジュールをインポート 型定義 */
+const target_branch = window.prompt("ブランチを入力してください。")
+const switch_branch = await $`git checkout -b ${target_branch}`
+
+// console.log(`${switch}へ切り替えが成功しました`)
+
+/** エラーハンドリングする 共通化 */
+const process = await $`git pull`
+
+/** エラーハンドリングする */
+console.log(process)
+
 let current_branch = await $`git branch --show-current`
 console.log(current_branch)
+
 let branch = await $`git branch --all --format='%(refname:short)'`
 console.log(branch)
 
+let input_branch: string | null = window.prompt("ブランチを入力してください。");
+console.log(input_branch)
 
 
 if (import.meta.main) {
@@ -30,15 +47,3 @@ if (import.meta.main) {
   // let response = await exec(`zsh -c "fzf | xargs git checkout"`);
 
 }
-
-/** MEMO
-    zx_deno install
-    Gitでコミットを一つにまとめてpushするまでを自動化するコマンドを作成する。
-    1. git checkout dev-master <= チェックアウトするブランチをGUIで選択移動できるようにする。
-    2. git pull
-    3. git checkout 作業ブランチ
-    4. git log --oneline でコミットIDを取得
-    5. 4で取得したコミットIDを git rebase -i コミットIDとする
-    6. エディターで編集
-    7. 実行後に git push --force-with-lease 作業ブランチ
-*/
