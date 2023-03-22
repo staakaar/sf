@@ -1,10 +1,14 @@
 // Learn more at https://deno.land/manual/examples/module_metadata#concepts
-
+/** 標準ライブラリ */
 import {$} from 'https://deno.land/x/zx_deno/mod.mjs'
-await $`date`
 
-const command_args: string[] = Deno.args
+/** クラス */
+import { CommandArg } from './command_args'
+
+/** コマンド引数をクラス化 */
+const command_args: CommandArg = new CommandArg(Deno.args)
 console.log(command_args)
+
 /** argsで引数を取得するモジュールをインポート 型定義 */
 const target_branch = window.prompt("ブランチを入力してください。")
 const switch_branch = await $`git checkout -b ${target_branch}`
@@ -27,7 +31,16 @@ let input_branch: string | null = window.prompt("ブランチを入力してく�
 console.log(input_branch)
 
 
-if (import.meta.main) {
+/**
+    コマンドの種類
+    1. レビュー修正 review_fix
+    2. ホットフィックス hotfix
+    3. 環境差分をなくす env_diff
+    4. diffで編集した内容をすべて確認しながらコミット file_confirm
+    4.フラグなし引数はエラーハンドリングさせる
+ */
+
+// if (import.meta.main) {
   // const git_log = Deno.run({
   //   cmd: ["git", "branch", "--all", "--format='%(refname:short)'"],
   //   stdin: "piped",
@@ -46,4 +59,4 @@ if (import.meta.main) {
   // console.log(text)
   // let response = await exec(`zsh -c "fzf | xargs git checkout"`);
 
-}
+// }
