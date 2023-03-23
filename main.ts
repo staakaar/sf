@@ -1,13 +1,30 @@
 // Learn more at https://deno.land/manual/examples/module_metadata#concepts
 /** 標準ライブラリ */
-import {$} from 'https://deno.land/x/zx_deno/mod.mjs'
+import { $, ProcessOutput } from 'https://deno.land/x/zx_deno/mod.mjs'
+
+/** Enum */
+import { ZxCommand } from './enums/zx_command.ts'
 
 /** クラス */
-import { CommandArg } from './command_args'
+import { CommandArg } from './command_args.ts'
+import { Branches } from './branches.ts'
 
 /** コマンド引数をクラス化 */
 const command_args: CommandArg = new CommandArg(Deno.args)
 console.log(command_args)
+
+/** 全ブランチ取得 */
+const allBranch: ProcessOutput = await ZxCommand.AllbranchList
+console.log(typeof allBranch.stdout)
+
+/** リモートブランチのみ取得 */
+const remoteBranches: Array<string> = allBranch.stdout.map( (branch) => branch.start_with('remotes'))
+console.log(remoteBranches)
+/** ローカルブランチのみ取得 */
+
+/** 初期化 */
+const branches = new Branches(allBranch.stdout)
+
 
 /** argsで引数を取得するモジュールをインポート 型定義 */
 const target_branch = window.prompt("ブランチを入力してください。")
@@ -24,8 +41,8 @@ console.log(process)
 let current_branch = await $`git branch --show-current`
 console.log(current_branch)
 
-let branch = await $`git branch --all --format='%(refname:short)'`
-console.log(branch)
+// let branch = await $`git branch --all --format='%(refname:short)'`
+// console.log(branch)
 
 let input_branch: string | null = window.prompt("ブランチを入力してください。");
 console.log(input_branch)
