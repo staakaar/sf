@@ -15,15 +15,14 @@ console.log(command_args)
 
 /** 全ブランチ取得 */
 const allBranch: ProcessOutput = await ZxCommand.AllbranchList
-console.log(typeof allBranch.stdout)
 
-/** リモートブランチのみ取得 */
-const remoteBranches: Array<string> = allBranch.stdout.map( (branch) => branch.start_with('remotes'))
-console.log(remoteBranches)
-/** ローカルブランチのみ取得 */
+/** 標準出力されたブランチを分割 */
+// const branchList: Array<string> = allBranch.stdout.split('\n')
+// console.log(branchList)
 
-/** 初期化 */
-const branches = new Branches(allBranch.stdout)
+/** Branches初期化 */
+const branches = new Branches(allBranch)
+console.log('main.ts branches', branches)
 
 
 /** argsで引数を取得するモジュールをインポート 型定義 */
@@ -33,7 +32,7 @@ const switch_branch = await $`git checkout -b ${target_branch}`
 // console.log(`${switch}へ切り替えが成功しました`)
 
 /** エラーハンドリングする 共通化 */
-const process = await $`git pull`
+// const process = await $`git pull`
 
 /** エラーハンドリングする */
 console.log(process)
