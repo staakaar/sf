@@ -4,10 +4,12 @@ import { $, ProcessOutput } from 'https://deno.land/x/zx_deno/mod.mjs'
 
 /** Enum */
 import { ZxCommand } from './enums/zx_command.ts'
+import { Emoji } from './enums/emoji.ts'
 
 /** クラス */
 import { CommandArg } from './command_args.ts'
 import { Branches } from './branches.ts'
+import { CommnadFactory } from './factory/command.ts'
 
 /** コマンド引数をクラス化 */
 const command_args: CommandArg = new CommandArg(Deno.args)
@@ -24,10 +26,17 @@ const allBranch: ProcessOutput = await ZxCommand.AllbranchList
 const branches = new Branches(allBranch)
 console.log('main.ts branches', branches)
 
+/** ブランチ一覧をfzfに出力する */
+const selected_bramnch = Deno.run(CommnadFactory.fzf_config(allBranch));
+const xargs_cmd = Deno.run(CommnadFactory.xargs_config(selected_bramnch));
 
+const status = xargs_cmd.status()
+console.log(status)
+
+// const checkoutBranch = await $`git branch --all --format='%(refname:short)' | fzf | xargs git checkout`
 /** argsで引数を取得するモジュールをインポート 型定義 */
-const target_branch = window.prompt("ブランチを入力してください。")
-const switch_branch = await $`git checkout -b ${target_branch}`
+// const target_branch = window.prompt(`ブランチを入力してください${Emoji.Rocket}`)
+// const switch_branch = await $`git checkout -b ${target_branch}`
 
 // console.log(`${switch}へ切り替えが成功しました`)
 
