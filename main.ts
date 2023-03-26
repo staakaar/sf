@@ -9,7 +9,7 @@ import { Emoji } from './enums/emoji.ts'
 /** クラス */
 import { CommandArg } from './command_args.ts'
 import { Branches } from './branches.ts'
-import { CommnadFactory } from './factory/command.ts'
+import { CommandFactory } from './factory/command.ts'
 
 /** コマンド引数をクラス化 */
 const command_args: CommandArg = new CommandArg(Deno.args)
@@ -18,19 +18,17 @@ console.log(command_args)
 /** 全ブランチ取得 */
 const allBranch: ProcessOutput = await ZxCommand.AllbranchList
 
-/** 標準出力されたブランチを分割 */
-// const branchList: Array<string> = allBranch.stdout.split('\n')
-// console.log(branchList)
-
 /** Branches初期化 */
 const branches = new Branches(allBranch)
 console.log('main.ts branches', branches)
 
-/** ブランチ一覧をfzfに出力する */
-const selected_bramnch = Deno.run(CommnadFactory.fzf_config(allBranch));
-const xargs_cmd = Deno.run(CommnadFactory.xargs_config(selected_bramnch));
+console.log('********', branches.toString())
 
-const status = xargs_cmd.status()
+/** ブランチ一覧をfzfに出力する */
+const selected_branch = await Deno.run(CommandFactory.fzf_config(branches.toString()));
+// const xargs_cmd = Deno.run(CommandFactory.xargs_config(selected_branch));
+
+// const status = xargs_cmd.status()
 console.log(status)
 
 // const checkoutBranch = await $`git branch --all --format='%(refname:short)' | fzf | xargs git checkout`

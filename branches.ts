@@ -46,4 +46,9 @@ export class Branches {
         return this.local_branches
     }
 
+
+    public toString(): String {
+        return this.all_branches.join("")
+    }
+
 }

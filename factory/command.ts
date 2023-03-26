@@ -4,22 +4,24 @@ export type Command = {
     stdout: String
 }
 
-export class CommnadFactory {
+export class CommandFactory {
 
     public static fzf_config(allBranch: any): Command {
         console.log({
-            cmd: ["fzf"],
-            stdin: allBranch.stdout,
-            stdout: "piped"
+            cmd: [
+                "fzf",
+            ],
+            stdin: allBranch,
+            stdout: "piped",
         })
         return {
             cmd: ["fzf"],
-            stdin: allBranch.stdout,
-            stdout: "piped"
+            stdin: allBranch,
+            stdout: "piped",
         }
     }
 
-    public static xargs_config(selected_bramnch: any): Command {
+    public static xargs_config(selected_branch: any): Command {
         return {
             cmd: [
                 "xargs",
@@ -29,7 +31,8 @@ export class CommnadFactory {
                 "checkout",
                 "{}"
             ],
-            stdin: selected_bramnch.stdout,
+            stdin: selected_branch.stdout,
+            stdout: "piped"
         }
     }
 }
