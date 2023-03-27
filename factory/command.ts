@@ -15,7 +15,11 @@ export class CommandFactory {
             stdout: "piped",
         })
         return {
-            cmd: ["fzf"],
+            cmd: [
+                "fzf",
+                "--preview",
+                "'cat {}'",
+            ],
             stdin: allBranch,
             stdout: "piped",
         }

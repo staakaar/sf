@@ -22,21 +22,30 @@ const allBranch: ProcessOutput = await ZxCommand.AllbranchList
 const branches = new Branches(allBranch)
 console.log('main.ts branches', branches)
 
-console.log('********', branches.toString())
+/** ブランチ切り替え */
+const checkoutBranch = await ZxCommand.GitGuiCheckout
+console.log(checkoutBranch)
+console.log(`${checkoutBranch}への切り替えが完了しました。`)
 
-/** ブランチ一覧をfzfに出力する */
-const selected_branch = await Deno.run(CommandFactory.fzf_config(branches.toString()));
-// const xargs_cmd = Deno.run(CommandFactory.xargs_config(selected_branch));
+/** プル */
+const pull_status = await ZxCommand.GitPull
+console.log(`プルが完了しました。${pull_status}`)
 
-// const status = xargs_cmd.status()
-console.log(status)
+/** TODO: メソッド切り替え 作業ブランチ切り替え */
+const checkoutToFeatureBranch = await ZxCommand.GitGuiCheckout
+console.log(checkoutToFeatureBranch)
+console.log(`${checkoutToFeatureBranch}への切り替えが完了しました。`)
 
-// const checkoutBranch = await $`git branch --all --format='%(refname:short)' | fzf | xargs git checkout`
-/** argsで引数を取得するモジュールをインポート 型定義 */
-// const target_branch = window.prompt(`ブランチを入力してください${Emoji.Rocket}`)
-// const switch_branch = await $`git checkout -b ${target_branch}`
+/** リベース */
+const rebase_status = await ZxCommand.GitGuiRebase
+console.log(`リベースが完了しました。${rebase_status}`)
 
-// console.log(`${switch}へ切り替えが成功しました`)
+/** git log からコミットID取得 rebase -iする */
+const rebase_i = await ZxCommand.GitReabseICommitId
+console.log(`リベースが完了しました。${rebase_i}`)
+
+/** エディター編集 */
+/** プッシュ リモートブランチがある場合は git push --force-with-lease なければgit push set-upstream */
 
 /** エラーハンドリングする 共通化 */
 // const process = await $`git pull`
@@ -49,9 +58,6 @@ console.log(current_branch)
 
 // let branch = await $`git branch --all --format='%(refname:short)'`
 // console.log(branch)
-
-let input_branch: string | null = window.prompt("ブランチを入力してください。");
-console.log(input_branch)
 
 
 /**
