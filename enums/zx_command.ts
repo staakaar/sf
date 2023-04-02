@@ -5,5 +5,8 @@ export const enum ZxCommand {
     GitGuiCheckout = $`git branch --all --format='%(refname:short)' | fzf | xargs git checkout`,
     GitPull = $`git pull`,
     GitGuiRebase = $`git branch --all --format='%(refname:short)' | fzf | xargs git rebase`,
-    GitReabseICommitId = $`git log --online --pretty=format:%H | fzf | xargs git rebase -i`
+    GitReabseICommitId = $`git log --online --pretty=format:%H | fzf | sed 's/.$//' | xargs git rebase -i`,
+    Fzf = $`fzf`,
+    RemoveLatChar = $`sed 's/.$//'`,
+    GitPushForce = $`git push --force-with-lease`
 }
